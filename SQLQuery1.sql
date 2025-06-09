@@ -1,6 +1,4 @@
--- Exploratory Data Analysis-EDA 
-
--- Sutun Býlgýlerý
+ 
 SELECT
 COLUMN_NAME,
 DATA_TYPE,
@@ -8,13 +6,13 @@ CHARACTER_MAXIMUM_LENGTH,
 IS_NULLABLE
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE
-TABLE_NAME='chocolate_sales'; 
+TABLE_NAME='chocolate_sales'; -- Exploratory Data Analysis-EDA  -- Sutun Bilgileri
 
--- Sutun Adlarýný Duzenleme
+-- Sutun Adlarini Duzenleme
 EXEC sp_rename 'chocolate_sales.Product', 'Product_', 'COLUMN';
 EXEC sp_rename 'chocolate_sales.Date', 'Date_', 'COLUMN';
 
--- 'Amount' Donusturmesý ve 'Amount_' Sutununu Veri Setine Ekleme
+-- 'Amount' Donusturmesi ve 'Amount_' Sutununu Veri Setine Ekleme
 ALTER TABLE chocolate_sales
 ADD Amount_ FLOAT;
 
@@ -27,7 +25,7 @@ SELECT Amount_ FROM chocolate_sales;
 ALTER TABLE chocolate_sales
 DROP COLUMN Amount;
 
--- Toplam Kayýt 
+-- Toplam Kayit
 SELECT COUNT(*) AS Total_Records From chocolate_sales; 
 
 -- NULL Kontrolleri 
@@ -40,7 +38,7 @@ SUM(CASE WHEN Amount_ IS NULL THEN 1 ELSE 0 END) AS Null_Amount_,
 SUM(CASE WHEN Boxes_Shipped IS NULL THEN 1 ELSE 0 END) AS Null_Boxes_Shipped
 FROM chocolate_sales; 
 
--- Tarih Aralýklarý (Min, Max) 
+-- Tarih Araliklari (Min, Max) 
 SELECT 
 MIN(Date_) AS Min_Date,
 MAX(Date_) AS Max_Date
@@ -63,7 +61,7 @@ MAX(Boxes_Shipped) AS Max_Amount,
 AVG(Boxes_Shipped) AS Avg_Amount
 FROM chocolate_sales; 
 
--- Zaman Bazýnda Toplu Satýs Analizi 
+-- Zaman Bazinda Toplu Satis Analizi 
 SELECT 
 YEAR(Date_) AS Sales_Year,
 MONTH(Date_) AS Sales_Month,
@@ -73,12 +71,12 @@ FROM chocolate_sales
 GROUP BY YEAR(Date_), MONTH(Date_)
 ORDER BY YEAR(Date_), MONTH(Date_) 
 
--- '0' Kutulu Gonderým Sayýsý (Unit Price Hesaplarken '0' degerý bolme islemý sýrasýnda yanlýs sonuca goturebýlýrdý)
+-- '0' Kutulu Gonderim Sayisi (Unit Price Hesaplarken '0' degeri bolme islemi sirasinda yanlis sonuca goturebilirdi)
 SELECT COUNT(*) AS Zero_Boxes_Count
 FROM chocolate_sales
 WHERE Boxes_Shipped = 0;
 
--- Unit_Price(Kutu Basýna Dusen Býrým Fýyat) Hesaplamasý 
+-- Unit_Price(Kutu BasÃ½na Dusen Birim Fiyat) Hesaplamasi 
 SELECT
 Amount_ / Boxes_Shipped AS Unit_Price
 FROM chocolate_sales;
